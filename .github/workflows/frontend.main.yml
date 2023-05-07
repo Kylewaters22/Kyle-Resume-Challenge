@@ -20,11 +20,13 @@ jobs:
     - name: Upload to blob storage
       uses: azure/CLI@v1
       with:
+        azcliversion: 2.0.72
         inlineScript: |
             az storage blob upload-batch --account-name getresumecounter1278fab4 --auth-mode key -d '$web' -s frontend/
     - name: Purge CDN endpoint
       uses: azure/CLI@v1
       with:
+        azcliversion: 2.0.72
         inlineScript: |
            az cdn endpoint purge --content-paths  "/*" --profile-name "kylewaterssrresume" --name "kylewaterssrresume" --resource-group "azureresume-rg"
 
@@ -32,4 +34,4 @@ jobs:
     - name: logout
       run: |
             az logout
-      if: always()
+      #if: always()
