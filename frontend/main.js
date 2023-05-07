@@ -2,11 +2,12 @@ window.addEventListener('DOMContentLoaded', (event) =>{
     getVisitCount();
 })
 
-const functionApi = 'http://localhost:7071/api/GetResumeCounter';
+const functionApiUrl = AccountEndpoint=https://kwazureresume.documents.azure.com:443/;AccountKey=7R78KVIxLVL2Ki4KlP0OZ1zlXkt4kbraeMlIxAGB8ttsJHH002BOQu8t92os1nL2CrgwV1SDhbn7ACDbGzYQEw==;
+const localfunctionApi = 'http://localhost:7071/api/GetResumeCounter';
 
 const getVisitCount = () => {
     let count = 30;
-    fetch(functionApi).then(response => {
+    fetch(functionApiUrl).then(response => {
         return response.json()
     }).then(response =>{
         console.log("Website called function API.");
