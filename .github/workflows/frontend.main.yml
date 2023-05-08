@@ -2,41 +2,36 @@ name: deploy_frontend
 # Deploys when push is made from frontend folder
 
 on:
-  push:
-    branches: [ main ]
-    paths:
-    - 'frontend/**'
+    push:
+        branches: [ main ]
+        paths:
+        - 'frontend/**'
+
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [16.x]
     steps:
-      - uses: actions/checkout@v2
-        with:
-          submodules: 'recursive'
-
-    - name: Login to Azure
-      uses: azure/login@v1
+    - uses: actions/checkout@v3
+    - uses: azure/login@v1
       with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-    - name: Build and Push to Blob Storage
+    - name: Upload to blob storage
       uses: azure/CLI@v1
       with:
         azcliversion: 2.48.1
         inlineScript: |
-          cd frontend
-          az storage blob upload-batch --account-name getresumecounter1278fab4 --auth-mode key -d '$web' -s build/
-
-    - name: Purge CDN Endpoint
+            az storage blob upload-batch --account-name getresumecounter1278fab4 --auth-mode key -d '$web' -s frontend/
+    - name: Purge CDN endpoint
       uses: azure/CLI@v1
       with:
         azcliversion: 2.48.1
         inlineScript: |
-          az cdn endpoint purge --content-paths  "/*" --profile-name "kylewaterssrresume" --name "kylewaterssrresume" --resource-group "azureresume-rg"
+           az cdn endpoint purge --content-paths  "/*" --profile-name "kylewaterssrresume" --name "kylewaterssrresume" --resource-group "azureresume-rg"
 
-    - name: Logout of Azure
-      run: az logout
+  # Azure logout
+    - name: logout
+      run: |
+            az logout
+      #if: always()
